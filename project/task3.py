@@ -77,8 +77,6 @@ class FiniteAutomaton:
             self.epsilon_states = epsilon_states
             return
 
-        self.start_states: Set[int] = start_states
-        self.final_states: Set[int] = final_states
         self.states = list()
 
         self.map_to_id: dict = {}
@@ -89,11 +87,11 @@ class FiniteAutomaton:
             self.map_from_id[id] = state
             self.states.append(id)
 
-        self.start_states = self.start_states.union(
-            (self.map_to_id[i.value] for i in df.start_states)
+        self.start_states = set(self.map_to_id[i.value] for i in start_states) | set(
+            self.map_to_id[i.value] for i in df.start_states
         )
-        self.final_states = self.final_states.union(
-            (self.map_to_id[i.value] for i in df.final_states)
+        self.final_states = set(self.map_to_id[i.value] for i in final_states) | set(
+            self.map_to_id[i.value] for i in df.final_states
         )
 
         self.matrix_word = FiniteAutomaton.df_to_matrix(self.map_to_id, df=df)
