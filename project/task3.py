@@ -177,7 +177,7 @@ def intersect_automata(
             sti_new = len(automaton2.states) * sti + stj
             final.add(sti_new)
 
-    states = [i for i in range(0, len(automaton1.states) + len(automaton2.states))]
+    states = [i for i in range(0, len(automaton1.states) * len(automaton2.states))]
     return FiniteAutomaton(
         matrix=map_result, states=states, start_states=start, final_states=final
     )
