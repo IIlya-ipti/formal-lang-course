@@ -22,7 +22,6 @@ def diagonalize_ones_matrix(matrix: dok_matrix, m: int) -> dok_matrix:
 def reachability_with_constraints(
     fa: FiniteAutomaton, constraints_fa: FiniteAutomaton
 ) -> dict[int, set[int]]:
-
     main = fa.get_matrix_word()
     constraints = constraints_fa.get_matrix_word()
 
