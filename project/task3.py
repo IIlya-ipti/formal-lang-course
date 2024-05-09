@@ -12,6 +12,7 @@ import queue
 from itertools import tee
 from typing import Union
 import project.task2 as tsk2
+from itertools import product
 
 
 class FiniteAutomaton:
@@ -37,8 +38,9 @@ class FiniteAutomaton:
                     matrix_word[label] = self.__get_matrix(n, n)
 
                 to = by_from[label]
-                to_id = self.map_to_id[to]
-                matrix_word[label][from_id, to_id] = 1
+                for id in to if isinstance(to, set) else {to}:
+                    to_id = self.map_to_id[id]
+                    matrix_word[label][from_id, to_id] = 1
         return matrix_word
 
     def __init__(
@@ -66,12 +68,9 @@ class FiniteAutomaton:
             self.matrix_word = matrix
             return
 
-        if isinstance(df, dfa.NondeterministicFiniteAutomaton):
-            df = df.to_deterministic().minimize()
-
         self.start_states: Set[int] = start_states
         self.final_states: Set[int] = final_states
-        self.states = df.states
+        self.states = list()
 
         self.map_to_id: dict = {}
         self.map_from_id: dict = {}
@@ -79,6 +78,7 @@ class FiniteAutomaton:
         for id, state in enumerate(df.states):
             self.map_to_id[state] = id
             self.map_from_id[id] = state
+            self.states.append(id)
 
         self.start_states = self.start_states.union(
             (self.map_to_id[i.value] for i in df.start_states)
@@ -87,7 +87,7 @@ class FiniteAutomaton:
             (self.map_to_id[i.value] for i in df.final_states)
         )
 
-        self.matrix_word: dok_matrix = self.__df_to_matrix(df)
+        self.matrix_word = self.__df_to_matrix(df=df)
 
     def accepts(self, word: Iterable[Symbol]) -> bool:
         q = queue.Queue()
@@ -192,11 +192,15 @@ def paths_ends(
     ins = intersect_automata(graph_auto, regex_auto)
 
     transitive_close = ins.get_transitive_close()
-    result = list()
+    result = set()
+
+    for st in ins.start_states & ins.final_states:
+        n = st // len(regex_auto.states)
+        result.add((n, n))
 
     for i in ins.start_states:
         for j in ins.final_states:
             if transitive_close[i, j] > 0:
                 m = len(regex_auto.states)
-                result.append(((i // m), (j // m)))
-    return result
+                result.add(((i // m), (j // m)))
+    return list(result)
