@@ -1,4 +1,3 @@
-from symtable import Symbol
 from typing import Iterable, List, Set
 from networkx import MultiDiGraph
 import pyformlang.regular_expression as re
@@ -13,14 +12,20 @@ from itertools import tee
 from typing import Union
 import project.task2 as tsk2
 from itertools import product
+from pyformlang.finite_automaton import Symbol
+from scipy.sparse import *
 
 
 class FiniteAutomaton:
 
-    def __get_matrix(self, n: int, m: int):
+    @staticmethod
+    def get_matrix(n: int, m: int):
         return dok_matrix((n, m), dtype=np.bool_)
 
-    def __df_to_matrix(self, df: dfa.DeterministicFiniteAutomaton) -> dok_matrix:
+    @staticmethod
+    def df_to_matrix(
+        map_to_id: dict, df: dfa.DeterministicFiniteAutomaton
+    ) -> dok_matrix:
         dict_df = df.to_dict()
 
         matrix_word = dict()
@@ -29,17 +34,17 @@ class FiniteAutomaton:
 
         for from_ in dict_df:
 
-            from_id = self.map_to_id[from_]
+            from_id = map_to_id[from_]
             by_from = dict_df[from_]
 
             for label in by_from:
 
                 if label not in matrix_word:
-                    matrix_word[label] = self.__get_matrix(n, n)
+                    matrix_word[label] = FiniteAutomaton.get_matrix(n, n)
 
                 to = by_from[label]
                 for id in to if isinstance(to, set) else {to}:
-                    to_id = self.map_to_id[id]
+                    to_id = map_to_id[id]
                     matrix_word[label][from_id, to_id] = 1
         return matrix_word
 
@@ -52,6 +57,9 @@ class FiniteAutomaton:
         final_states: Set = None,
         states: Set = None,
         matrix: dok_matrix = None,
+        map_to_id: dict = None,
+        map_from_id: dict = None,
+        epsilon_states: set = None,
     ):
         if start_states is None:
             start_states = set()
@@ -63,9 +71,10 @@ class FiniteAutomaton:
             self.start_states = start_states
             self.final_states = final_states
             self.states = states
-            self.map_to_id = None
-            self.map_from_id = None
+            self.map_to_id = map_to_id
+            self.map_from_id = map_from_id
             self.matrix_word = matrix
+            self.epsilon_states = epsilon_states
             return
 
         self.start_states: Set[int] = start_states
@@ -87,7 +96,19 @@ class FiniteAutomaton:
             (self.map_to_id[i.value] for i in df.final_states)
         )
 
-        self.matrix_word = self.__df_to_matrix(df=df)
+        self.matrix_word = FiniteAutomaton.df_to_matrix(self.map_to_id, df=df)
+
+    def _add(left_dict: dict, right_dict: dict):
+        dict_result = {}
+        for i in left_dict:
+            dict_result[i] = dok_matrix(left_dict[i], copy=True)
+
+        for i in right_dict:
+            if i in dict_result:
+                dict_result[i] += right_dict[i]
+            else:
+                dict_result[i] = dok_matrix(right_dict[i], copy=True)
+        return dict_result
 
     def accepts(self, word: Iterable[Symbol]) -> bool:
         q = queue.Queue()
@@ -134,8 +155,8 @@ class FiniteAutomaton:
 
     def get_transitive_close(self):
         n = len(self.states)
-        bool_matrix = self.__get_matrix(n, n)
-
+        bool_matrix = FiniteAutomaton.get_matrix(n, n)
+        bool_matrix += eye(n, dtype=bool)
         for i in self.matrix_word:
             bool_matrix |= self.matrix_word[i]
 

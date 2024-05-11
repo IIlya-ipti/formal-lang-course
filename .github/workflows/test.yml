@@ -62,3 +62,4 @@ jobs:
             pytest tests/autotests/test_task4.py
             pytest tests/autotests/test_task6.py
             pytest tests/autotests/test_task7.py
+            pytest tests/autotests/test_task8.py
