@@ -55,11 +55,6 @@ jobs:
         run: |
           pre-commit run --all-files --color always --verbose --show-diff-on-failure
 
-      - name: Run test3
+      - name: Run test
         run: |
-            pytest tests/autotests/test_task2.py
-            pytest tests/autotests/test_task3.py
-            pytest tests/autotests/test_task4.py
-            pytest tests/autotests/test_task6.py
-            pytest tests/autotests/test_task7.py
-            pytest tests/autotests/test_task8.py
+          python ./scripts/run_tests.py
