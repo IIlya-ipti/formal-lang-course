@@ -144,3 +144,7 @@ _minted-presentation/
 *.fdb_latexmk
 *.fls
 *.gz
+
+.vscode/
+tmp.dot
+tst.ipynb
