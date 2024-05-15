@@ -62,11 +62,18 @@ def rsm_to_matrix(rsm: RecursiveAutomaton) -> tuple:
 
 
 def cfpq_with_tensor(
-    rsm: RecursiveAutomaton,
+    cfg_or_rsm: RecursiveAutomaton,
     graph: nx.DiGraph,
     start_nodes: set[int] = None,
     final_nodes: set[int] = None,
 ) -> set[tuple[int, int]]:
+
+    rsm = (
+        cfg_or_rsm
+        if isinstance(cfg_or_rsm, RecursiveAutomaton)
+        else cfg_to_rsm(cfg_or_rsm)
+    )
+
     if start_nodes is None:
         start_nodes = graph.nodes
 
