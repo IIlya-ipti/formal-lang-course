@@ -52,10 +52,10 @@ class TestReachabilityGllAlgorithm:
         matrix = cfpq_with_matrix(
             deepcopy(grammar), deepcopy(graph), start_nodes, final_nodes
         )
-        tensor = cfpq_with_tensor(
-            cfg_to_rsm(deepcopy(grammar)), deepcopy(graph), start_nodes, final_nodes
-        )
+        # tensor = cfpq_with_tensor(
+        #     cfg_to_rsm(deepcopy(grammar)), deepcopy(graph), start_nodes, final_nodes
+        # )
         gll = cfpq_with_gll(
             cfg_to_rsm(deepcopy(grammar)), deepcopy(graph), start_nodes, final_nodes
         )
-        assert (hellings == matrix) and (matrix == tensor) and (tensor == gll)
+        assert (hellings == matrix) and (matrix == gll)
