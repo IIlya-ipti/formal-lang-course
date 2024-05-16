@@ -32,16 +32,16 @@ def mult_(left_: dict, right_: dict, rules_: dict):
     return result
 
 
-def addition_(left_: dict, right_: dict):
+def addition_(left_: dict, right_: dict, copy=True):
     result = {}
     for varl in left_:
-        result[varl] = dok_matrix(left_[varl], copy=True)
+        result[varl] = dok_matrix(left_[varl], copy=copy)
 
     for varr in right_:
         if varr in result:
             result[varr] = result[varr] + right_[varr]
         else:
-            result[varr] = dok_matrix(right_[varr], copy=True)
+            result[varr] = dok_matrix(right_[varr], copy=copy)
     return result
 
 
@@ -100,7 +100,7 @@ def cfpq_with_matrix(
     N = len(cfg.variables)
     V = len(graph.nodes())
 
-    total_iters = V * V
+    total_iters = V * N
     for i in range(total_iters):
         M_tmp = mult_(M, M, productions_by_body)
         M = addition_(M, M_tmp)

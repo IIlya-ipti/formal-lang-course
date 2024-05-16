@@ -14,7 +14,7 @@ import pyformlang.regular_expression as re
 from pyformlang.finite_automaton import Symbol
 from .task3 import *
 from collections import defaultdict
-from .task7 import cfg_to_weak_normal_form
+from .task7 import cfg_to_weak_normal_form, addition_
 import scipy as sp
 from pyformlang.finite_automaton import TransitionFunction, EpsilonNFA, Symbol, State
 
@@ -88,18 +88,30 @@ def cfpq_with_tensor(
     r = rsm_fa.get_n_states()
     n = graph_fa.get_n_states()
 
+    graph_tmp = graph_fa
+
     last = None
 
-    while True:
-        ins = intersect_automata(graph_fa, rsm_fa)
+    new = 1
+
+    ins_tmp = None
+
+    while new > 0:
+        new = 0
+        ins = intersect_automata(graph_tmp, rsm_fa)
+
+        if ins_tmp is not None:
+            ins_ = addition_(ins.matrix_word, ins_tmp.matrix_word, copy=False)
+            ins = FiniteAutomaton(matrix=ins_, states=ins.states)
+            ins_tmp = ins
+        else:
+            ins_tmp = ins
+
         C = ins.get_transitive_close()
 
         points = list(zip(*C.nonzero()))
 
-        if last is not None and len(set(points)) <= len(last):
-            break
-        else:
-            last = set(points)
+        tmp = {}
 
         for vi, vj in points:
             from_rsm, to_rsm = vi % r, vj % r
@@ -112,11 +124,26 @@ def cfpq_with_tensor(
                     raise RuntimeError()
                 symb = symb_1[0]
 
+                from_graph, to_graph = vi // r, vj // r
+
                 if symb not in graph_fa.matrix_word:
                     graph_fa.matrix_word[symb] = FiniteAutomaton.get_matrix(n, n)
 
-                from_graph, to_graph = vi // r, vj // r
+                #
+                if graph_fa.matrix_word[symb][from_graph, to_graph] == False:
+                    if symb not in tmp:
+                        tmp[symb] = FiniteAutomaton.get_matrix(n, n)
+                    tmp[symb][from_graph, to_graph] = True
+                    new += 1
+
                 graph_fa.matrix_word[symb][from_graph, to_graph] = True
+
+        graph_tmp = FiniteAutomaton(
+            matrix=tmp,
+            start_states=graph_fa.start_states,
+            final_states=graph_fa.final_states,
+            states=graph_fa.states,
+        )
 
     S = rsm.initial_label.value
     if S not in graph_fa.matrix_word:
