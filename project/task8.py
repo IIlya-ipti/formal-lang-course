@@ -94,20 +94,22 @@ def cfpq_with_tensor(
 
     new = 1
 
-    ins_tmp = None
-
     while new > 0:
         new = 0
-        ins = intersect_automata(graph_tmp, rsm_fa)
 
-        if ins_tmp is not None:
-            ins_ = addition_(ins.matrix_word, ins_tmp.matrix_word, copy=False)
-            ins = FiniteAutomaton(matrix=ins_, states=ins.states)
-            ins_tmp = ins
+        n_all = r * n
+        syms = graph_fa.matrix_word.keys() & rsm_fa.matrix_word.keys()
+        if len(syms) == 0:
+            C = dok_matrix((n_all, n_all), dtype=bool)
         else:
-            ins_tmp = ins
+            dct = {}
+            for i in syms:
+                dct[i] = sp.sparse.kron(graph_fa.matrix_word[i], rsm_fa.matrix_word[i])
+            C = sum(dct.values())
+        C += eye(n_all, dtype=bool)
 
-        C = ins.get_transitive_close()
+        for _ in range(n_all):
+            C += C @ C
 
         points = list(zip(*C.nonzero()))
 
@@ -129,21 +131,10 @@ def cfpq_with_tensor(
                 if symb not in graph_fa.matrix_word:
                     graph_fa.matrix_word[symb] = FiniteAutomaton.get_matrix(n, n)
 
-                #
                 if graph_fa.matrix_word[symb][from_graph, to_graph] == False:
-                    if symb not in tmp:
-                        tmp[symb] = FiniteAutomaton.get_matrix(n, n)
-                    tmp[symb][from_graph, to_graph] = True
                     new += 1
 
                 graph_fa.matrix_word[symb][from_graph, to_graph] = True
-
-        graph_tmp = FiniteAutomaton(
-            matrix=tmp,
-            start_states=graph_fa.start_states,
-            final_states=graph_fa.final_states,
-            states=graph_fa.states,
-        )
 
     S = rsm.initial_label.value
     if S not in graph_fa.matrix_word:
