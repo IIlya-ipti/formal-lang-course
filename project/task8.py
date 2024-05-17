@@ -88,14 +88,9 @@ def cfpq_with_tensor(
     r = rsm_fa.get_n_states()
     n = graph_fa.get_n_states()
 
-    graph_tmp = graph_fa
-
     last = None
 
-    new = 1
-
-    while new > 0:
-        new = 0
+    while True:
 
         n_all = r * n
         syms = graph_fa.matrix_word.keys() & rsm_fa.matrix_word.keys()
@@ -113,7 +108,10 @@ def cfpq_with_tensor(
 
         points = list(zip(*C.nonzero()))
 
-        tmp = {}
+        if last is not None and len(set(points)) <= len(last):
+            break
+        else:
+            last = set(points)
 
         for vi, vj in points:
             from_rsm, to_rsm = vi % r, vj % r
@@ -130,9 +128,6 @@ def cfpq_with_tensor(
 
                 if symb not in graph_fa.matrix_word:
                     graph_fa.matrix_word[symb] = FiniteAutomaton.get_matrix(n, n)
-
-                if graph_fa.matrix_word[symb][from_graph, to_graph] == False:
-                    new += 1
 
                 graph_fa.matrix_word[symb][from_graph, to_graph] = True
 
