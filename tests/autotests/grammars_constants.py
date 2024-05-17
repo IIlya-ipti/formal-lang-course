@@ -1,6 +1,6 @@
 from pyformlang.cfg import cfg
-from constants import *
 from random import sample
+from .constants import *
 
 GRAMMARS_TABLE: list[dict[str, list[str | cfg.CFG]]] = [
     {
