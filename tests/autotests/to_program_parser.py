@@ -3,7 +3,7 @@ from copy import copy, deepcopy
 import pyformlang as pl
 from pyformlang.cfg import Variable, Terminal
 import networkx as nx
-from constants import LABEL
+from .constants import LABEL
 
 
 class FreshVar:

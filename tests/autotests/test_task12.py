@@ -2,7 +2,7 @@ import random
 from copy import deepcopy
 
 import pytest
-from to_program_parser import (
+from .to_program_parser import (
     WELL_TYPED,
     ILL_TYPED,
     GraphProgram,
