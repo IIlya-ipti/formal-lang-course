@@ -4,7 +4,7 @@ import pyformlang
 import networkx as nx
 import queue as q
 from collections import defaultdict
-from .task2 import *
+from task2 import *
 
 
 def cfg_to_weak_normal_form(cfg: CFG) -> CFG:

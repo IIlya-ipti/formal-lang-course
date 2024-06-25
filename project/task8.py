@@ -4,17 +4,17 @@ import pyformlang
 import networkx as nx
 import queue as q
 from collections import defaultdict
-from .task2 import *
-from .task6 import *
+from task2 import *
+from task6 import *
 from scipy.sparse import dok_matrix
 import copy
 from pyformlang.rsa import RecursiveAutomaton
 from pyformlang.rsa.box import Box
 import pyformlang.regular_expression as re
 from pyformlang.finite_automaton import Symbol
-from .task3 import *
+from task3 import *
 from collections import defaultdict
-from .task7 import cfg_to_weak_normal_form, addition_
+from task7 import cfg_to_weak_normal_form, addition_
 import scipy as sp
 from pyformlang.finite_automaton import TransitionFunction, EpsilonNFA, Symbol, State
 

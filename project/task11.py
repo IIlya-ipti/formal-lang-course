@@ -1,6 +1,6 @@
 from antlr4 import *
-from .GrammarLexer import GrammarLexer
-from .GrammarParser import GrammarParser
+from GrammarLexer import GrammarLexer
+from GrammarParser import GrammarParser
 
 from antlr4 import *
 from antlr4.InputStream import InputStream

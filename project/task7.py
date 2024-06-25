@@ -4,8 +4,8 @@ import pyformlang
 import networkx as nx
 import queue as q
 from collections import defaultdict
-from .task2 import *
-from .task6 import *
+from task2 import *
+from task6 import *
 from scipy.sparse import dok_matrix
 import copy
 
