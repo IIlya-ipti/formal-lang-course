@@ -18,10 +18,11 @@ from grammarinator.tool import (
 from . import ProgramGenerator
 
 # Fix import statements in try block to run tests
-try:
-    from project.task11 import prog_to_tree, nodes_count, tree_to_prog
-except ImportError:
-    pytestmark = pytest.mark.skip("Task 11 is not ready to test!")
+
+from project.task11 import prog_to_tree, nodes_count, tree_to_prog
+
+# except ImportError:
+#     pytestmark = pytest.mark.skip("Task 11 is not ready to test!")
 
 
 # This fixture probably uses internal API, so it can be broken at any time :(
