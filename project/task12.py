@@ -10,24 +10,24 @@ class TypeError(Exception):
     pass
 
 
-def copy(strin, n):
-    res = ""
-    for i in range(n):
-        res += strin
-    return res
+# def copy(strin, n):
+#     res = ""
+#     for i in range(n):
+#         res += strin
+#     return res
 
 
-def to_new_val(inp):
-    val = inp.split("^")
-    print(val)
-    real_val = val[0]
-    tmp = val[1]
-    print(tmp)
-    first, second = tmp[1:-1].split("..")
-    return "|".join([copy(real_val, i) for i in range(int(first), int(second) + 1)])
+# def to_new_val(inp):
+#     val = inp.split("^")
+#     print(val)
+#     real_val = val[0]
+#     tmp = val[1]
+#     print(tmp)
+#     first, second = tmp[1:-1].split("..")
+#     return "|".join([copy(real_val, i) for i in range(int(first), int(second) + 1)])
 
 
-print(to_new_val("abc^[2..5]"))
+# print(to_new_val("abc^[2..5]"))
 
 # def mat_to_nfa(automaton: FiniteAutomaton) -> NondeterministicFiniteAutomaton:
 #     nfa = NondeterministicFiniteAutomaton()
