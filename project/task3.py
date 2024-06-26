@@ -10,7 +10,7 @@ import numpy as np
 import queue
 from itertools import tee
 from typing import Union
-import project.task2 as tsk2
+import task2 as tsk2
 from itertools import product
 from pyformlang.finite_automaton import Symbol
 from scipy.sparse import *

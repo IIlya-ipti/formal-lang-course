@@ -1,4 +1,3 @@
-import project
 from . import *
 
 import sys
