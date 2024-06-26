@@ -426,23 +426,23 @@ def exec_program(program: str) -> dict[str, set[tuple]]:
         return False
 
 
-def test_typing_program():
+# def test_typing_program():
 
-    program = """
-    let g is graph
+#     program = """
+#     let g is graph
 
-    add edge (1, "a", 2) to g
-    add edge (2, "a", 3) to g
-    add edge (3, "a", 1) to g
-    add edge (1, "c", 5) to g
-    add edge (5, "b", 4) to g
-    add edge (4, "b", 5) to g
+#     add edge (1, "a", 2) to g
+#     add edge (2, "a", 3) to g
+#     add edge (3, "a", 1) to g
+#     add edge (1, "c", 5) to g
+#     add edge (5, "b", 4) to g
+#     add edge (4, "b", 5) to g
 
-    let q = "a"^[1..3] . q . "b"^[2..3] | "c"
-
-
-    """
-    exec_program(program)
+#     let q = "a"^[1..3] . q . "b"^[2..3] | "c"
 
 
-test_typing_program()
+#     """
+#     exec_program(program)
+
+
+# test_typing_program()
