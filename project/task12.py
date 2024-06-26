@@ -186,9 +186,9 @@ class TypeChecker(GrammarVisitor):
             if str(ctx.getChild(i)) != ","
         ]
         q_type = self.visit(ctx.expr())
-        if q_type == self.FA_type or q_type == self.RSM_type:
+        if q_type == self.FA_type or q_type == self.RSM_type or q_type == "char":
             return "Set<" + " * ".join(["int" for i in returns]) + ">"
-        raise TypeError("error type in visit select")
+        raise TypeError(f"error type in visit select{q_type}")
 
     def visitV_filter(self, ctx: GrammarParser.V_filterContext):
         expr_type = self.visit(ctx.expr())
